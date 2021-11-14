@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap");
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+body {
+	font-family: "Open Sans", sans-serif;
+	background-color: #2a2a2a;
+	color: lightgray;
+	margin: 0;
+}
+header {
+	text-align: center;
+	background-color: #424242;
+	padding: 20px;
+}
+header h1 {
+	font-size: 72px;
+	color: white;
+	text-shadow: 1px 1px white, -1px 1px white, -1px -1px white,
+		1px -1px white;
+	letter-spacing: 3px;
+	font-family: "Architects Daughter", cursive;
+}
+header h2 {
+	font-size: 36px;
+	font-family: "Architects Daughter", cursive;
+}
+header::after {
+	content: "";
+	display: inline-block;
+	background-image: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 150' preserveAspectRatio='none' style='height: 100%25; width: 100%25;'%3E%3Cpath d='M0.00,92.27 C216.83,192.92 304.30,8.39 500.00,109.03 L500.00,0.00 L0.00,0.00 Z' style='stroke: none;fill: %23424242;'%3E%3C/path%3E%3C/svg%3E");
+	height: 150px;
+	width: 100%;
+	position: absolute;
+	left: 0px;
+}
+#container {
+	width: 60%;
+	margin: auto;
+	font-size: 36px;
+}
+.check {
+	display: flex;
+	flex-direction: row;
+	user-select: none;
+	cursor: pointer;
+		flex-wrap: wrap;
+}
+.check input {
+	height: 40px;
+	width: 40px;
+	margin-right: 20px;
+}
+.check * {
+	cursor: pointer;
+}
+#add, #addDatetime {
+	width: calc(60% - 120px);
+	margin-left: 20%;
+	height: 60px;
+	margin-top: 20px;
+	padding: 10px 20px;
+	outline: 0;
+	background-color: #3f3f3f;
+	border: 0;
+	color: white;
+	border-bottom: 4px solid darkgray;
+	font-size: 24px;
+	transition: 0.2s;
+	margin-right: 20px;
+}
+#add:focus, #addDatetime:focus {
+	border-bottom-color: white;
+}
+#letsgo {
+	--color: lightgray;
+	background: transparent;
+	width: 100px;
+	height: 60px;
+	border: 3px solid var(--color);
+	color: var(--color);
+	padding: 5px 10px;
+	font-size: 18px;
+	border-radius: 8px;
+	transition: 0.2s;
+}
+#letsgo:hover {
+	--color: white;
+cursor: pointer;
+}
+#letsgo:active {
+	opacity: 0.8;
+}
+.close {
+	color: lightcoral;
+	display: inline-block;
+	margin-left: 20px;
+	display: none;
+}
+.close:hover {
+	opacity: 0.8;
+}
+.close:active {
+	opacity: 0.5;
+}
+.check:hover > .close {
+	display: block;
+}
+#savedata{
+	--color: darkgray;
+	margin-left:20%;
+	width:60%;
+	height:60px;
+	margin-top:20px;
+	font-size:24px;
+	background:#424242;
+	border:2px solid var(--color);
+	border-radius:8px;
+	color: var(--color);
+}
+#savedata:hover{
+	background:#343434;
+	--color: lightgray;
+}
+#savedata:active{
+	--color: white;
+	background:#2a2a2a;
+}
+.duedata{
+	font-size:18px;
+	display:inline-block;
+	width:100%;
+	padding-left:60px;
+}
