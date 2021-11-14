@@ -135,3 +135,22 @@ cursor: pointer;
 	width:100%;
 	padding-left:60px;
 }
+footer{
+	font-size:18px;
+	line-height:30px;
+	position:absolute;
+	text-align: center;
+	bottom:20px;
+	width:100%;
+}
+footer a{
+	color:lightgray !important;
+	border-bottom:3px solid darkviolet;
+	text-decoration:none;
+	padding:2px 5px;
+	transition: 0.5s;
+	background:linear-gradient(45deg,darkviolet, darkviolet) no-repeat 0px 30px ;
+}
+footer a:hover{
+	background:linear-gradient(45deg,darkviolet, darkviolet) no-repeat 0px 0px ;
+}
