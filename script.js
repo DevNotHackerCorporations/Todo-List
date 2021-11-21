@@ -1,4 +1,5 @@
 var notification
+loadinterval = 1000
 function checkNotificationPromise() {
   try {
     Notification.requestPermission().then();
@@ -48,28 +49,35 @@ setInterval(function() {
       //a day away
       let posttime = new Date(data[x][1]);
       let realtime = new Date()
-      if (posttime.getFullYear() === realtime.getFullYear() && posttime.getMonth() === realtime.getMonth() && ((posttime.getDay() === (realtime.getDay() + 1)) && (posttime.getHours() === realtime.getHours()) && (posttime.getMinutes() === realtime.getMinutes()) && (posttime.getSeconds - realtime.getSeconds()) < 10)) {
-        let notification = new Notification(`${x} should be finished in less than 1 day.`)
+      if ((posttime.getFullYear() === realtime.getFullYear()) && (posttime.getMonth() === realtime.getMonth()) && ((posttime.getDay() === (realtime.getDay() + 1)) && (posttime.getHours() === realtime.getHours()) && (posttime.getMinutes() === realtime.getMinutes()) && (posttime.getSeconds - realtime.getSeconds()) < 10)) {
+        var notification = new Notification(`${x} should be finished in less than 1 day.`)
       }
       //an hour away
       if (posttime.getFullYear() === realtime.getFullYear() && posttime.getMonth() === realtime.getMonth() && ((posttime.getDay() === realtime.getDay()) && (posttime.getHours() === (realtime.getHours() + 1)) && (posttime.getMinutes() === realtime.getMinutes()) && ((posttime.getSeconds - realtime.getSeconds()) < 10))) {
-        let notification = new Notification(`${x} should be finished in less than 1 hour.`)
+        var notification = new Notification(`${x} should be finished in less than 1 hour.`)
       }
       //10 minutes away
       if (posttime.getFullYear() === realtime.getFullYear() && posttime.getMonth() === realtime.getMonth() && ((posttime.getDay() === realtime.getDay()) && (posttime.getHours() == realtime.getHours()) && (posttime.getMinutes() === (realtime.getMinutes() + 10))  && ((posttime.getSeconds - realtime.getSeconds()) < 10))) {
-        let notification = new Notification(`${x} should be finished in less than 10 minutes.`)
+        var notification = new Notification(`${x} should be finished in less than 10 minutes.`)
       }
       //10 seconds away let notification = new Notification(`${x} should be finished right now`) check ur discord andrew bye ANDREW
       if ((posttime.getDate() === realtime.getDate()) && (posttime.getHours() == realtime.getHours()) && (posttime.getMinutes() === realtime.getMinutes())  && ((posttime.getSeconds - realtime.getSeconds()) < 10)) {
-        let notification = new Notification(`${x} should be finished by now.`)
+        var notification = new Notification(`${x} should be finished by now.`)
       }
     }
   }
 }, 9000)
-let posttime = new Date()
-let getdate = posttime.getDate()+1
-let timestring = posttime.getFullYear()+"-"+(posttime.getMonth()+1)+"-"+(getdate < 10 ? "0":"")+getdate+"T"+(posttime.getHours() < 10 ? "0":"")+posttime.getHours()+":"+(posttime.getMinutes() < 10 ? "0":"")+posttime.getMinutes()
-$("#addDatetime").val(timestring)
+let timestring;
+let getdate;
+const create_time = function() {
+	posttime = new Date()
+	//posttime = new Date(data[x][1]);
+	getdate = posttime.getDate()+1
+	timestring = posttime.getFullYear()+"-"+(posttime.getMonth()+1)+"-"+(getdate < 10 ? "0":"")+getdate+"T"+(posttime.getHours() < 10 ? "0":"")+posttime.getHours()+":"+(posttime.getMinutes() < 10 ? "0":"")+posttime.getMinutes()
+	$("#addDatetime").val(timestring)
+}
+create_time()
+setInterval(create_time, 60000)//weird
 function refresh() {
 	$("#container").html("");
 	counter = -1;
@@ -77,25 +85,30 @@ function refresh() {
 		counter += 1;
 		let posttime = new Date(data[x][1])
 		let timestring2 = (posttime.getMonth()+1)+"/"+posttime.getDate()+"/"+posttime.getFullYear()+" "+(posttime.getHours()%12 === 0 ? 12 : posttime.getHours()%12)+":"+(posttime.getMinutes() < 10 ? "0":"")+posttime.getMinutes()+(posttime.getHours()%12 === posttime.getHours ? "AM":"PM")
-		$("#container").append(`<div class="check" data-key="${x}" data-due="${data[x][1]}">
+		$("#container").append(`<div class="check ${data[x][0] ? "checked" : "unchecked"}" data-key="${x}" data-due="${data[x][1]}">
 		<input type="checkbox" id="checkbox__${counter}" ${
 			data[x][0] ? "checked" : ""
 		}>
 		<label for="checkbox__${counter}">${x}</label>
-		<span class="close">&times;</span>
+		<div class='check_tools'>
+			<span class="close">&times;</span> 
+			<span class='check__edit'>&#9999;️</span>
+		</div>
 		<span class="duedata"> ${timestring2}</span>
 		</div>`);
 	}
 	$("span.close").click((e) => {
 		let element = $(e.currentTarget);
-		delete data[$(element.parent()).data("key")];
-		element.parent().remove();
+		delete data[$(element.parent().parent()).data("key")];
+		element.parent().parent().remove();
 		savedata()
 	});
 	$("input[type='checkbox']").click((e) => {
 		let element = $(e.currentTarget);
 		let sib = $(element.parent()).data("key");
 		data[sib][0] = !data[sib][0];
+		element.parent().toggleClass("unchecked")
+		element.parent().toggleClass("checked")
 		savedata()
 	});
 }
@@ -116,12 +129,15 @@ $("#letsgo").click(() => {
 	posttime = new Date($("#addDatetime").val())
 	let timestring2 = (posttime.getMonth()+1)+"/"+posttime.getDate()+"/"+posttime.getFullYear()+" "+(posttime.getHours()%12 === 0 ? 12 : posttime.getHours()%12)+":"+(posttime.getMinutes() < 10 ? "0":"")+posttime.getMinutes()+(posttime.getHours()%12 === posttime.getHours ? "AM":"PM")
 	counter += 1
-	$("#container").append(`<div class="check" data-key="${x}" data-due="${data[textdata][1]}">
+	$("#container").append(`<div class="check unchecked" data-key="${textdata}" data-due="${data[textdata][1]}">
 		<input type="checkbox" id="checkbox__${counter}" ${
-			data[textdata][0] ? "checked" : ""
+			data[x][0] ? "checked" : ""
 		}>
 		<label for="checkbox__${counter}">${textdata}</label>
-		<span class="close">&times;</span>
+		<div class='check_tools'>
+			<span class="close">&times;</span> 
+			<span class='check__edit'>&#9999;️</span>
+		</div>
 		<span class="duedata"> ${timestring2}</span>
 		</div>`);
 });
@@ -144,10 +160,37 @@ const savedata = ()=>{
 	diff = encodeURIComponent(diff)
 	fetch("/update?q="+diff).then(x=>x.text()).then(x=>location.reload())*/
 	localStorage.setItem("data", JSON.stringify(data))
+	loadme()
 }
 $("#add").keydown((e)=>{
 	if (e.key === "Enter"){
 		document.getElementById("letsgo").click()
 	}
 })
-setInterval(savedata(), 1000)
+//setInterval(savedata(), 1000)
+const loadme = () =>{
+	let load_time = 500
+	$("#savingmsg").html("Saving ⏳")
+	clearInterval(loadinterval)
+	loadinterval = setTimeout(()=>{
+		$("#savingmsg").html("Saving. ⏳")
+		setTimeout(()=>{
+			$("#savingmsg").html("Saving.. ⏳")
+			setTimeout(()=>{
+				$("#savingmsg").html("Saving... ⏳")
+				setTimeout(()=>{
+					$("#savingmsg").html("Saved ✅")
+				}, load_time)
+			}, load_time)
+		}, load_time)
+	}, load_time)
+}
+function deletecomplete(){
+	if (confirm("Are you sure you want to delete all completed items? This is unreversable. ")){
+		for (e of $('.checked')){
+			delete data[$(e).data("key")]
+			e.remove()
+		}
+		savedata()
+	}
+}

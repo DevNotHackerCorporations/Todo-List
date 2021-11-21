@@ -9,16 +9,22 @@
     <link rel="icon" type="image/jpg" href="todolistfav.jpg">
 	</head>
 	<body>
+		<section id="nav">
+			<button class="button" title="delete all completed items" onclick="deletecomplete()">🗑️ ✅</button>
+			<span id="savingmsg">Saved &#9989;</span>
+		</section>
 		<header>
 			<h1>Todo List</h1>
-			<h2>By <a href="https://github.com/DevNotHackerCorporations/" target="_blank">DevNotHackerCorporations</a></h2>
+			<h2>By <a href="https://github.com/DevNotHackerCorporations/" target="_blank" style="--h:50px;">DevNotHackerCorporations</a></h2>
 		</header>
 		<section style="margin-top: 150px" id="container"></section>
-		<input type="text" id="add" /><button id="letsgo">Go!</button>
-    	<br><input type="datetime-local" id="addDatetime" value="2030-12-31T12:59" />
-		<br>
+		<section id="input">
+			<input type="text" id="add" /><button id="letsgo">Go!</button>
+			<br><input type="datetime-local" id="addDatetime" value="2030-12-31T12:59" />
+			<br>
+		</section>
 		<!--<button id="savedata">Save</button>-->
 		<script defer src="script.js"></script>
-		<footer>This site is <a href="https://github.com/DevNotHackerCorporations/Todo-List" target="_blank">open source!</a> <a target="_blank"  href="https://github.com/DevNotHackerCorporations/Todo-List/edit/main/index.html">Help us improve it.</a> (You can use this on your site as long as you follow the <a href="/LICENSE.txt" target="_blank">license.</a></footer>
+		<footer>This site is <a href="https://github.com/DevNotHackerCorporations/Todo-List" target="_blank">open source!</a> Please <a target="_blank"  href="https://github.com/DevNotHackerCorporations/Todo-List/edit/main/index.html">help us improve it.</a> (You can use this on your site as long as you follow the <a href="/LICENSE.txt" target="_blank">license.</a>)</footer>
 	</body>
 </html>

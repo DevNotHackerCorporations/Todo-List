@@ -2,3 +2,6 @@
 - [ ] If overdue, make the text there red.
 - [ ] Fix Notifs system
 - [ ] Make In Progress
+- [x] "Saved"
+- [ ] Ability to edit
+- [x] X out all finished todos

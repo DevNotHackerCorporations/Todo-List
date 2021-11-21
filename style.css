@@ -59,8 +59,8 @@ header::after {
 	cursor: pointer;
 }
 #add, #addDatetime {
-	width: calc(60% - 120px);
-	margin-left: 20%;
+	width: calc(60vw - 120px);
+	/*margin-left: 20%;*/
 	height: 60px;
 	margin-top: 20px;
 	padding: 10px 20px;
@@ -98,17 +98,12 @@ cursor: pointer;
 .close {
 	color: lightcoral;
 	display: inline-block;
-	margin-left: 20px;
-	display: none;
 }
-.close:hover {
+.check_tools > *:hover {
 	opacity: 0.8;
 }
-.close:active {
+.check_tools > *:active {
 	opacity: 0.5;
-}
-.check:hover > .close {
-	display: block;
 }
 #savedata{
 	--color: darkgray;
@@ -146,17 +141,54 @@ footer{
 	background:#2a2a2a;
 	padding:10px;
 }
-footer a{
+a{
+	--h: 30px;
 	color:lightgray !important;
 	border-bottom:3px solid darkviolet;
 	text-decoration:none;
 	padding:2px 5px;
 	transition: 0.2s;
-	background:linear-gradient(45deg,darkviolet, darkviolet) no-repeat 0px 30px ;
+	background:linear-gradient(45deg,darkviolet, darkviolet) no-repeat 0px var(--h) ;
 }
-footer a:hover{
+a:hover{
 	background:linear-gradient(45deg,darkviolet, darkviolet) no-repeat 0px 0px ;
 }
 .duedata::before{
 	content:"Finish by";
+}
+#input{
+	margin-left:20%;
+}
+#savingmsg{
+	font-size:24px;
+	margin:10px;
+	display:inline-block;
+	text-align:center;
+	/*width:calc(60vw - 120px);*/
+	color:white;
+}
+.check_tools{
+	margin-left:20px;
+	display: none;
+}
+.check:hover .check_tools{
+	display: block;
+}
+#nav{
+	display: flex;
+	flex-direction: row;
+	margin-left:100px;
+	column-gap: 20px;
+}
+#nav .button{
+	font-size: 24px;
+	background:#2a2a2a;
+	color: white;
+	border:0;
+	transition: 0.2s;
+	padding:0px 10px;
+	cursor: pointer;
+}
+#nav .button:hover{
+	filter:brightness(1.4);
 }
