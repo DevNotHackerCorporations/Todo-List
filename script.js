@@ -13,7 +13,7 @@ if (!filename) {
 			format += (`[${json_data[x][0] ? "x": "&nbsp;&nbsp;"}] ${x} &nbsp;&nbsp;`)
 		}
 		$("#choosetodo__todos").append(`
-			<a href="javascript:void(0)" data-url="/?name=${encodeURIComponent(localStorage.key(index))}" style="padding:0;" class="choose_todo_link">
+			<a href="javascript:void(0)" data-url="?name=${encodeURIComponent(localStorage.key(index))}" style="padding:0;" class="choose_todo_link">
 				<div class="choose_todo_todo" data-name="${localStorage.key(index)}">
 					<span class="close">&times;</span>${localStorage.key(index)} 
 					<span style="display:inline-block;margin-left:20px;color: gray;">${format}</span>
@@ -31,7 +31,7 @@ if (!filename) {
 	})
 	$(".choose_todo_link").click(e=>{
 		if (e.target != $("span.close")){
-			location.href = $(e.currentTarget).data("url")
+			location.href = loc+$(e.currentTarget).data("url")
 		}
 	})
 }else{
