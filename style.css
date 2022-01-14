@@ -166,6 +166,7 @@ a:hover{
 	text-align:center;
 	/*width:calc(60vw - 120px);*/
 	color:white;
+	filter: none !important;
 }
 .check_tools{
 	margin-left:20px;
@@ -221,7 +222,6 @@ a:hover{
     width: 50vw;
     border-radius: 8px;
     white-space: nowrap;
-    text-overflow: ellipsis;
     overflow: hidden;
 }
 .choose_todo_todo span.close{
@@ -315,4 +315,71 @@ a:hover{
 	.check + .check{
 		margin-top: 10px;
 	}
+}
+#exportdata, #importdata{
+	color: lightgray;
+	background: #0f0f0f;
+	font-size: 24px;
+	border: 0;
+	padding: 20px;
+	margin: 20px;
+	border-radius: 8px;
+	cursor: pointer;
+}
+/* The Modal (background) */
+.modal {
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto; /* 15% from the top and centered */
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.button::after{
+    content: attr(title);
+	display:none;
+	animation: opr 0.2s ease;
+}
+
+.button:hover::after{
+    content: attr(title);
+	display: block;
+    font-size: 16px;
+    background: #0f0f0f;
+    padding: 10px;
+    position: fixed;
+    top: 60px;
+    left: 0%;
+	opacity: 1;
+	animation: op ease 0.2s;
+	width:fit-content;
+	width:-moz-fit-content;
+	border-radius:8px;
+}
+.button:hover{
+	width:fit-content;
+}
+@keyframes op{
+	from{opacity:0;top: 70px;}
+	to{opacity:1;top: 60px;}
+}
+@keyframes opr{
+	from{display:block;opacity:1;}
+	to{opacity:0;}
+}
+#savingmsg::after{
+	left:initial;
 }

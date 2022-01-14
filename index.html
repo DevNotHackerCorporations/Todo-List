@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="keywords" content="Todolist, DevNotHackerCorporations, planner, online">
-		<meta name="description" content="Online todo lists/planners">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="author" content="DevNotHackerCorporations">
-		<meta property="og:image" content="https://todolist.andrewchen51.repl.co/favicon.png" />
-		<title>Todo</title>
-		<link href="style.css" rel="stylesheet">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="icon" type="image/jpg" href="favicon.png">
-	</head>
-	<body>
-		<div id="choosetodo">
-			<header>
-				<h1>Todo List</h1>
-				<h2>By <a href="https://github.com/DevNotHackerCorporations/" target="_blank" style="--h:50px;">DevNotHackerCorporations</a></h2>
-			</header>
-			<section style="margin-top: 150px" id="choosetodo__container">
-				<div id="choosetodo__explain">
-					Todolist is a modern, easy-to-use online todo-list and planner. To create a todolist, simply press the button below.
-				</div>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="keywords" content="Todolist, DevNotHackerCorporations, planner, online">
+	<meta name="description" content="Online todo lists/planners">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="author" content="DevNotHackerCorporations">
+	<meta property="og:image" content="https://todolist.andrewchen51.repl.co/favicon.png" />
+	<title>Todo</title>
+	<link href="style.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+	</script>
+	<link rel="icon" type="image/jpg" href="favicon.png">
+</head>
+
+<body>
+	<div id="choosetodo">
+		<header>
+			<h1>Todo List</h1>
+			<h2>By <a href="https://github.com/DevNotHackerCorporations/" target="_blank" style="--h:50px;">DevNotHackerCorporations</a></h2>
+		</header>
+		<section style="margin-top: 150px" id="choosetodo__container">
+			<div id="choosetodo__explain">
+				Todolist is a modern, easy-to-use online todo-list and planner. To create a todolist, simply press the button below.
+			</div>
+			<button id="importdata">Import todos</button>
+				<button id="exportdata">Export todos</button>
 				<div id="choosetodo__todos"></div>
 				<div id="choosetodo_input">
 					<input placeholder="Name of new todo"><button>Go!</button>
@@ -31,9 +36,10 @@
 		<div id="todolist" style="display: none">
 			<section id="nav">
 				<button class="button" title="return back to the homepage" onclick="location.href = loc">⇦</button>
+				<button class="button" title="save" onclick="savedata()">💾</button>
 				<button class="button" title="print this page" onclick="print()">🖨️</button>
 				<button class="button" title="delete all completed items" onclick="deletecomplete()">🗑️ ✅</button>
-				<span id="savingmsg">Saved &#9989;</span>
+				<span id="savingmsg" class="button" title="Your todolist has been saved">Saved &#9989;</span>
 			</section>
 			<header>
 				<h1>Todo List</h1>
