@@ -1,28 +1,55 @@
+window.onmessage = function(event){ 
+	if (event.data.html){
+		$("body").append(event.data.html)
+	}
+	if (event.data.js){
+		eval(event.data.js)
+	}
+	if (event.data.exportdata){
+		let orig = JSON.parse(event.data.exportdata["Which todos would you like to include"])
+		exportdata = {}
+		for (x in orig){
+			if (orig[x][0]){
+				exportdata[x] = storage[x]
+			}
+		}
+		exportdata = JSON.stringify(exportdata)
+		document.querySelector("iframe").remove()
+		$.post("https://todolist-api.andrewchen51.repl.co/add", { data: exportdata }, function (result) {
+			if (result["error"]) {
+				create_modal("<span style='color:red'>" + result["error"] + "</span>")
+			} else {
+				create_modal("<span style='font-size: 24px'>Your todolist code is <pre style='display:inline'>" + result["token"] + "</pre>. This code will expire in <b>five</b> minutes</span>")
+			}
+		})		
+	}
+}
+
 var notification
 const url_data = new URLSearchParams(window.location.search)
 const filename = url_data.get("name")
 let storage = localStorage
 const loc = "https://" + location.hostname + location.pathname
 function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
+	let name = cname + "=";
+	let decodedCookie = decodeURIComponent(document.cookie);
+	let ca = decodedCookie.split(';');
+	for (let i = 0; i < ca.length; i++) {
+		let c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
 }
 
-if (!getCookie("color_scheme")){
+if (!getCookie("color_scheme")) {
 	document.cookie = "color_scheme=dark; expires=Thu, 01 Jan 3000 00:00:00 UTC; path=/;";
 }
-switch (getCookie("color_scheme")){
+switch (getCookie("color_scheme")) {
 	case "dark":
 		$("#color_scheme_toggle").html("☀️")
 		$("body").addClass("dark").removeClass("light")
@@ -33,9 +60,9 @@ switch (getCookie("color_scheme")){
 		$("body").addClass("light").removeClass("dark")
 		break
 }
-$("#color_scheme_toggle").click(()=>{
+$("#color_scheme_toggle").click(() => {
 	element = $("#color_scheme_toggle")
-	switch ($("body").hasClass("light")){
+	switch ($("body").hasClass("light")) {
 		case true:
 			element.html("☀️")
 			document.cookie = "color_scheme=dark; expires=Thu, 01 Jan 3000 00:00:00 UTC; path=/;";
@@ -109,23 +136,23 @@ class FakeLocalStorage {
 	}
 }
 if (url_data.get("temp")) {
+	$("#savingmsg").html("❌ Not saved").attr("title", "Your todolist has not been saved")
 	storage = new FakeLocalStorage()
 	for (let i = 0; i < localStorage.length; i++) {
 		storage.setItem(localStorage.key(i), localStorage.getItem(localStorage.key(i)))
 	}
 }
 if (!filename) {
-	window.addEventListener("message", (event) => {
-		if (event.data.html){
-			$("body").append(event.data.html)
-		}
-	}, false);
 	for (let index = 0; index < storage.length; index++) {
 		if (storage.key(index) == "null") {
 			continue
 		}
 		format = ""
-		json_data = JSON.parse(storage.getItem(storage.key(index)))
+		try{
+			json_data = JSON.parse(storage.getItem(storage.key(index)))
+		}catch{
+			json_data = {}
+		}
 		for (x in json_data) {
 			format += (`[${json_data[x][0] ? "x" : "&nbsp;&nbsp;"}] ${x} &nbsp;&nbsp;`)
 		}
@@ -154,16 +181,39 @@ if (!filename) {
 	$("#exportdata").click(() => {
 		data = {}
 		for (let x = 0; x < storage.length; x++) {
-			data[storage.key(x)] = storage.getItem(storage.key(x))
+			if (storage.key(x) !== "null"){
+				data[storage.key(x)] = [true, "3000-01-01T12:00"]
+			}
 		}
-		data = JSON.stringify(data)
+		let frame = document.createElement("IFRAME")
+		frame.setAttribute("src", loc + "?name=Which%20todos%20would%20you%20like%20to%20include&temp=true")
+		frame.classList.add("bigiframe")
+		document.body.appendChild(frame)
+		window.frames[0].onload = function(){
+			window.frames[0].postMessage({
+				"html":`
+<style>
+#input, #nav, .check_tools{
+	display: none !important;
+}
+</style>
+<button id="letsgo" style="width:60%;margin-left:20%;margin-top:40px;font-size:18px;" onclick='window.parent.postMessage({"exportdata":data}, "*")';>Done!</button>
+				`,
+				"js":`
+storage.data = ${JSON.stringify(data)}
+data = storage.data
+refresh()
+				`
+			}, "*")
+		}
+		/*
 		$.post("https://todolist-api.andrewchen51.repl.co/add", { data: data }, function (result) {
 			if (result["error"]) {
 				create_modal("<span style='color:red'>" + result["error"] + "</span>")
 			} else {
 				create_modal("<span style='font-size: 24px'>Your todolist code is <pre style='display:inline'>" + result["token"] + "</pre>. This code will expire in <b>five</b> minutes</span>")
 			}
-		});
+		});*/
 	})
 	$("#importdata").click(() => {
 		data = {}
@@ -256,7 +306,7 @@ function absolutev(x) {
 }
 
 function start() {
-	if (storage.getItem(filename) === null) {
+	if (!storage.getItem(filename)) {
 		storage.setItem(filename, "{}")
 	}
 	data = JSON.parse(storage.getItem(filename))
@@ -381,6 +431,9 @@ $("#add").keydown((e) => {
 })
 //setInterval(savedata(), 1000)
 const loadme = () => {
+	if (url_data.get("temp")) {
+		return
+	}
 	$("#savingmsg").attr("title", "Your todolist is being saved")
 	let load_time = 500
 	$("#savingmsg").html("Saving ⏳")
