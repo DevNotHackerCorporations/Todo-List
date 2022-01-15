@@ -5,23 +5,33 @@
 *::after {
 	box-sizing: border-box;
 }
+body.dark, body.dark *{
+	--main-background: #2a2a2a;
+	--light-bg: #424242;
+	--main-color: lightgray;
+	--bold-color: white;
+	--highlight-color:darkviolet;
+	--nav-bg: var(--main-background);
+	--input-color:#3f3f3f;
+	--homepage-select-bg:#0f0f0f;
+}
 body {
 	font-family: "Open Sans", sans-serif;
-	background-color: #2a2a2a;
-	color: lightgray;
+	background-color: var(--main-background);
+	color: var(--main-color);
 	margin: 0;
 	padding-bottom:100px;
 }
 header {
 	text-align: center;
-	background-color: #424242;
+	background-color: var(--light-bg);
 	padding: 20px;
 }
 header h1 {
 	font-size: 72px;
-	color: white;
-	text-shadow: 1px 1px white, -1px 1px white, -1px -1px white,
-		1px -1px white;
+	color: var(--bold-color);
+	text-shadow: 1px 1px var(--bold-color), -1px 1px var(--bold-color), -1px -1px var(--bold-color),
+		1px -1px var(--bold-color);
 	letter-spacing: 3px;
 	font-family: "Architects Daughter", cursive;
 }
@@ -65,19 +75,19 @@ header::after {
 	margin-top: 20px;
 	padding: 10px 20px;
 	outline: 0;
-	background-color: #3f3f3f;
+	background-color: var(--input-color);
 	border: 0;
-	color: white;
+	color: var(--bold-color);
 	border-bottom: 4px solid darkgray;
 	font-size: 24px;
 	transition: 0.2s;
 	margin-right: 20px;
 }
 #add:focus, #addDatetime:focus {
-	border-bottom-color: white;
+	border-bottom-color: var(--bold-color);
 }
 #letsgo {
-	--color: lightgray;
+	--color: var(--main-color);
 	background: transparent;
 	width: 100px;
 	height: 60px;
@@ -89,7 +99,7 @@ header::after {
 	transition: 0.2s;
 }
 #letsgo:hover {
-	--color: white;
+	--color: var(--bold-color);
 cursor: pointer;
 }
 #letsgo:active {
@@ -112,18 +122,18 @@ cursor: pointer;
 	height:60px;
 	margin-top:20px;
 	font-size:24px;
-	background:#424242;
+	background:var(--light-bg);
 	border:2px solid var(--color);
 	border-radius:8px;
 	color: var(--color);
 }
 #savedata:hover{
 	background:#343434;
-	--color: lightgray;
+	--color: var(--main-color);
 }
 #savedata:active{
-	--color: white;
-	background:#2a2a2a;
+	--color: var(--bold-color);
+	background:var(--main-background);
 }
 .duedata{
 	font-size:18px;
@@ -138,20 +148,20 @@ footer{
 	text-align: center;
 	bottom:0px;
 	width:100%;
-	background:#2a2a2a;
+	background:var(--main-background);
 	padding:10px;
 }
 a{
 	--h: 30px;
-	color:lightgray !important;
-	border-bottom:3px solid darkviolet;
+	color:var(--main-color) !important;
+	border-bottom:3px solid var(--highlight-color);
 	text-decoration:none;
 	padding:2px 5px;
 	transition: 0.2s;
-	background:linear-gradient(45deg,darkviolet, darkviolet) no-repeat 0px var(--h) ;
+	background:linear-gradient(45deg,var(--highlight-color), var(--highlight-color)) no-repeat 0px var(--h) ;
 }
 a:hover{
-	background:linear-gradient(45deg,darkviolet, darkviolet) no-repeat 0px 0px ;
+	background:linear-gradient(45deg,var(--highlight-color), var(--highlight-color)) no-repeat 0px 0px ;
 }
 .duedata::before{
 	content:"Finish by";
@@ -178,12 +188,13 @@ a:hover{
 #nav{
 	display: flex;
 	flex-direction: row;
-	margin-left:100px;
+	padding-left:100px;
 	column-gap: 20px;
+	background: var(--nav-bg);
 }
 #nav .button{
 	font-size: 24px;
-	background:#2a2a2a;
+	background:var(--nav-bg);
 	color: white;
 	border:0;
 	transition: 0.2s;
@@ -200,7 +211,7 @@ a:hover{
 	padding: 5px 20px;
 	outline: none;
 	overflow: auto;
-	background:#424242;
+	background:var(--light-bg);
 	color: lightgray;
 	font-weight: bold;
 	border: 0;
@@ -214,7 +225,7 @@ a:hover{
 .choose_todo_todo{
     margin: auto;
     margin-top: 20px;
-    background: #0f0f0f;
+    background: var(--homepage-select-bg);
     text-align: left;
     padding: 20px 40px;
 	padding-left: 0;
@@ -242,7 +253,7 @@ a:hover{
 #choosetodo_input input{
 	margin: auto;
     margin-top: 20px;
-    background: #0f0f0f;
+    background: var(--homepage-select-bg);
     text-align: left;
     padding: 20px 20px;
 	font-size: 24px;
@@ -261,9 +272,9 @@ a:hover{
 	margin-left:20px;
 	width:80px;
 	height:60px;
-	background: #0f0f0f;
+	background: var(--homepage-select-bg);
 	border-radius:8px;
-	color: whitesmoke;
+	color: var(--main-color);
 	border: 0;
 	font-size:18px;
 	cursor:pointer;
@@ -317,8 +328,8 @@ a:hover{
 	}
 }
 #exportdata, #importdata{
-	color: lightgray;
-	background: #0f0f0f;
+	color: var(--main-color);
+	background: var(--homepage-select-bg);
 	font-size: 24px;
 	border: 0;
 	padding: 20px;
@@ -382,4 +393,32 @@ a:hover{
 }
 #savingmsg::after{
 	left:initial;
+}
+body.light *, body.light{
+	--main-background: #d5e8ff;
+    --light-bg: #d0d0d0;
+    --main-color: #393939;
+    --bold-color: black;
+	--highlight-color: yellow;
+	--nav-bg:#6b6b6b;
+	--input-color:whitesmoke;
+	--homepage-select-bg: whitesmoke;
+}
+body.light header::after{
+	background: url("data:image/svg+xml, <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 150' preserveAspectRatio='none' style='height: 100%25; width: 100%25;'><path d='M0.00,92.27 C216.83,192.92 304.30,8.39 500.00,109.03 L500.00,0.00 L0.00,0.00 Z' style='stroke: none;fill: %23d0d0d0;'></path></svg>")
+}
+body.light :is(.choose_todo_todo:hover, #choosetodo_input input:focus, #choosetodo_input button:hover){
+	filter: brightness(0.9);
+}
+
+#color_scheme_toggle{
+	position:fixed;
+	left: 0;
+	bottom: 0;
+	font-size:48px;
+	background:var(--homepage-select-bg);
+	border: 0;
+	cursor: pointer;
+	padding:10px;
+	z-index:1;
 }

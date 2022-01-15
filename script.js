@@ -3,6 +3,52 @@ const url_data = new URLSearchParams(window.location.search)
 const filename = url_data.get("name")
 let storage = localStorage
 const loc = "https://" + location.hostname + location.pathname
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+if (!getCookie("color_scheme")){
+	document.cookie = "color_scheme=dark; expires=Thu, 01 Jan 3000 00:00:00 UTC; path=/;";
+}
+switch (getCookie("color_scheme")){
+	case "dark":
+		$("#color_scheme_toggle").html("☀️")
+		$("body").addClass("dark").removeClass("light")
+		break
+
+	case "light":
+		$("#color_scheme_toggle").html("🌙")
+		$("body").addClass("light").removeClass("dark")
+		break
+}
+$("#color_scheme_toggle").click(()=>{
+	element = $("#color_scheme_toggle")
+	switch ($("body").hasClass("light")){
+		case true:
+			element.html("☀️")
+			document.cookie = "color_scheme=dark; expires=Thu, 01 Jan 3000 00:00:00 UTC; path=/;";
+			$("body").addClass("dark").removeClass("light")
+			break
+
+		case false:
+			element.html("🌙")
+			document.cookie = "color_scheme=light; expires=Thu, 01 Jan 3000 00:00:00 UTC; path=/;";
+			$("body").addClass("light").removeClass("dark")
+			break
+	}
+})
 
 function create_modal(html) {
 	$("body").append(`
@@ -69,6 +115,11 @@ if (url_data.get("temp")) {
 	}
 }
 if (!filename) {
+	window.addEventListener("message", (event) => {
+		if (event.data.html){
+			$("body").append(event.data.html)
+		}
+	}, false);
 	for (let index = 0; index < storage.length; index++) {
 		if (storage.key(index) == "null") {
 			continue
@@ -137,6 +188,7 @@ if (!filename) {
 		});
 	})
 } else {
+	$("title").text(filename)
 	$("#choosetodo").hide()
 	$("#todolist").show()
 	$("#todolist > header h1").text(filename)

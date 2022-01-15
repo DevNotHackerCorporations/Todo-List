@@ -15,7 +15,8 @@
 	<link rel="icon" type="image/jpg" href="favicon.png">
 </head>
 
-<body>
+<body class="dark">
+	<button id="color_scheme_toggle">☀️️</button>
 	<div id="choosetodo">
 		<header>
 			<h1>Todo List</h1>
@@ -46,11 +47,10 @@
 			</header>
 			<section style="margin-top: 150px" id="container"></section>
 			<section id="input">
-				<input type="text" id="add" /><button id="letsgo">Go!</button>
+				<input type="text" id="add" autocomplete="off"/><button id="letsgo">Go!</button>
 				<br><input type="datetime-local" id="addDatetime" value="2030-12-31T12:59" />
 				<br>
 			</section>
-			<!--<button id="savedata">Save</button>-->
 			<script defer src="script.js"></script>
 			<footer>This site is <a href="https://github.com/DevNotHackerCorporations/Todo-List" target="_blank">open source!</a> That means that you can <a target="_blank"  href="https://github.com/DevNotHackerCorporations/Todo-List/edit/main/index.html">help us improve it!</a> (You can use this on your site as long as you follow the <a href="/LICENSE.txt" target="_blank">license.</a>)</footer>
 		</div>
