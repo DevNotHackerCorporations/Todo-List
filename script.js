@@ -6,7 +6,7 @@ window.onmessage = function(event){
 		eval(event.data.js)
 	}
 	if (event.data.exportdata){
-		let orig = JSON.parse(event.data.exportdata["Which todos would you like to include"])
+		let orig = (event.data.exportdata)
 		exportdata = {}
 		for (x in orig){
 			if (orig[x][0]){
@@ -17,9 +17,9 @@ window.onmessage = function(event){
 		document.querySelector("iframe").remove()
 		$.post("https://todolist-api.andrewchen51.repl.co/add", { data: exportdata }, function (result) {
 			if (result["error"]) {
-				create_modal("<span style='color:red'>" + result["error"] + "</span>")
+				create_alert("<span style='color:red'>" + result["error"] + "</span>")
 			} else {
-				create_modal("<span style='font-size: 24px'>Your todolist code is <pre style='display:inline'>" + result["token"] + "</pre>. This code will expire in <b>five</b> minutes</span>")
+				create_alert("<span>Your todolist code is <pre style='display:inline'>" + result["token"] + "</pre>. This code will expire in <b>five</b> minutes</span>")
 			}
 		})		
 	}
@@ -178,6 +178,14 @@ if (!filename) {
 			location.href = loc + $(e.currentTarget).data("url")
 		}
 	})
+} else {
+	$("title").text(filename)
+	$("#choosetodo").hide()
+	$("#todolist").show()
+	$("#todolist > header h1").text(filename)
+	start()
+}
+function defexport(){
 	$("#exportdata").click(() => {
 		data = {}
 		for (let x = 0; x < storage.length; x++) {
@@ -215,6 +223,9 @@ refresh()
 			}
 		});*/
 	})
+}
+
+function defimport(){
 	$("#importdata").click(() => {
 		data = {}
 		for (let x = 0; x < storage.length; x++) {
@@ -222,7 +233,7 @@ refresh()
 		}
 		$.post("https://todolist-api.andrewchen51.repl.co/get", { name: prompt("What's the code?").toUpperCase() }, function (result) {
 			if (result["error"]) {
-				create_modal("<span style='color:red;font-size: 24px;'>" + result["error"] + "</span>")
+				create_alert("<span style='color:red;'>ERROR: " + result["error"] + "</span>")
 			} else {
 				d = data
 				for (k in result["result"]) {
@@ -237,13 +248,23 @@ refresh()
 			}
 		});
 	})
-} else {
-	$("title").text(filename)
-	$("#choosetodo").hide()
-	$("#todolist").show()
-	$("#todolist > header h1").text(filename)
-	start()
 }
+
+function defcopy(){
+	$("#copytododata").click(() => {
+		data = {}
+		for (let x = 0; x < storage.length; x++) {
+			if (storage.key(x) != "null"){
+				data[storage.key(x)] = storage.getItem(storage.key(x))
+			}
+		}
+		navigator.clipboard.writeText(JSON.stringify(data))
+		create_alert('Copied todo data to clipboard')
+		defcopy()
+	})
+}
+defcopy()
+defexport()
 $("#choosetodo_input button").click(e => {
 	newlistname = $("#choosetodo_input input").val().trim()
 	if (newlistname === "") {
@@ -482,3 +503,51 @@ window.onkeyup = function (e) {
 		savedata()
 	}
 }
+// Too lazy to figure it out myself so I just copy pasted off of stackoverflow
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  elmnt.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+alertCount = 0
+function create_alert(text, whattodo=null){
+	alertCount += 1
+	if (!whattodo){
+		whattodo = "jQuery('#todoalert"+alertCount+"').remove()"
+	}
+  	document.body.innerHTML += `<div class="mserror" id="todoalert${alertCount}" style="color:black;">Todolist alert<button onclick=\"${whattodo}\">&times;</button><div class="errcontent"><button class="erricon">&times;</button><span class="mserrortotheright">${text}<br><button class="errokay" onclick=\"${whattodo}\">Okay</button></span></div></div>`
+  	document.querySelectorAll(".mserror").forEach((el)=>{dragElement(el)})
+	defcopy()
+	defexport()
+	defimport()
+}
+defimport()
