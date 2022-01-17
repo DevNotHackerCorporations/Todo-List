@@ -499,4 +499,12 @@ div.mserror>button:hover{
 .errokay:active{
   opacity: 0.5;
 }
-
+#color_scheme_toggle, #importdata, #copytododata, #exportdata{
+	transition: 0.2s ease;
+}
+:is(#importdata, #copytododata, #exportdata):hover{
+	transform: scale(1.25);
+}
+#color_scheme_toggle:hover{
+	font-size:72px;
+}

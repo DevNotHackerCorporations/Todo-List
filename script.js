@@ -93,14 +93,23 @@ function create_modal(html) {
 const checkmarks = () => {
 	$(".check__edit").click((e) => {
 		let element = $(e.currentTarget);
-		let label = $($(element.parent()).siblings()[$(element.parent()).siblings().index($("label"))])
+		let siblings = $(element.parent()).siblings()
+		index = -1
+		step = 0
+		for (el of siblings){
+			if ($(el).prop("tagName") === "LABEL"){
+				index = step
+				break
+			}
+			step += 1
+		}
+		let label = $(siblings[index])
 		let datael = data[label.text()]
-		delete data[label.text()]
-		console.log(label)
 		label.prop('outerHTML', `<input data-data='${JSON.stringify(datael)}' for="${label.attr("for")}" value="${label.text()}" class="editbox">`)
 		$(".editbox").keydown((e) => {
 			if (e.key === "Enter") {
 				let element = $(e.currentTarget);
+				delete data[label.text()]
 				data[element.val()] = element.data("data")
 				element.prop("outerHTML", `<label for="${element.attr("for")}">${element.val()}</label>`)
 				document.getElementById("letsgo").click()
@@ -383,6 +392,7 @@ function refresh() {
 		<div class='check_tools'>
 			<span class="close">&times;</span> 
 			<span class='check__edit'>&#9999;️</span>
+			<span class='check__move'>🚚</span>
 		</div>
 		<span class="duedata"> ${timestring2}</span>
 		</div>`);
@@ -429,6 +439,7 @@ $("#letsgo").click(() => {
 			<div class='check_tools'>
 				<span class="close">&times;</span> 
 				<span class='check__edit'>&#9999;️</span>
+				<span class='check__move'>🚚</span>
 			</div>
 			<span class="duedata"> ${timestring2}</span>
 			</div>`);
@@ -552,3 +563,46 @@ function create_alert(text, whattodo=null){
 }
 defimport()
 
+async function movecheck(item){
+	item = $(item)
+	item.css("background-color", "var(--highlight-color)")
+	pointer = 1
+	for (check of $(".check")){
+		if (!$(check).is(item)){
+			$(check).after("<span class='movedividers' style='color:orange;margin:10px;margin-left:20px;display: flex;align-items:center;column-gap:20px'>"+pointer+"<hr style='flex:1;height:fit-content;height:-moz-fit-content;border-color:orange;'></span>")
+			pointer += 1
+		}
+	}
+	result = await new Promise((resolve, reject) => {
+		create_alert(`Which line would you like to move this to?
+			<br>
+			<form onsubmit='event.preventDefault()'>
+				<input id='input_move_num' width='200px' type='number' onmousedown='void()' min='1' max='${$(".check").length-1}' required style='width:200px;'>
+			</form>
+		`, "console.log()")
+		$("#input_move_num").select()
+		$(".errokay").click(e=>{
+			if (1<= Number($("#input_move_num").val()) && Number($("#input_move_num").val()) <= $(".check").length-1){
+				res = Number($("#input_move_num").val())
+				jQuery('#todoalert'+alertCount).remove()
+				resolve(res)
+			}
+		})
+	});
+	name = item.data("key")
+	d = data[name]
+	delete data[name]
+	newdata = {}
+	for (let key = 1;key<=Object.keys(data).length;key++){
+		newdata[Object.keys(data)[key-1]] = data[Object.keys(data)[key-1]]
+		if (key === result){
+			newdata[name] = d
+		}
+	}
+	data = newdata
+	savedata()
+	refresh()
+}
+$(".check__move").click(e=>{
+	movecheck($(e.currentTarget).parent().parent())
+})
