@@ -1,15 +1,15 @@
-window.onmessage = function(event){ 
-	if (event.data.html){
+window.onmessage = function (event) {
+	if (event.data.html) {
 		$("body").append(event.data.html)
 	}
-	if (event.data.js){
+	if (event.data.js) {
 		eval(event.data.js)
 	}
-	if (event.data.exportdata){
+	if (event.data.exportdata) {
 		let orig = (event.data.exportdata)
 		exportdata = {}
-		for (x in orig){
-			if (orig[x][0]){
+		for (x in orig) {
+			if (orig[x][0]) {
 				exportdata[x] = storage[x]
 			}
 		}
@@ -21,7 +21,7 @@ window.onmessage = function(event){
 			} else {
 				create_alert("<span>Your todolist code is <pre style='display:inline'>" + result["token"] + "</pre>. This code will expire in <b>five</b> minutes</span>")
 			}
-		})		
+		})
 	}
 }
 
@@ -91,13 +91,30 @@ function create_modal(html) {
 	`)
 }
 const checkmarks = () => {
+	$(".check__move").click(e => {
+		movecheck($(e.currentTarget).parent().parent())
+	})
+	$("#todolist span.close").click((e) => {
+		let element = $(e.currentTarget);
+		delete data[$(element.parent().parent()).data("key")];
+		element.parent().parent().remove();
+		savedata()
+	});
+	$("input[type='checkbox']").click((e) => {
+		let element = $(e.currentTarget);
+		let sib = $(element.parent()).data("key");
+		data[sib][0] = !data[sib][0];
+		element.parent().toggleClass("unchecked")
+		element.parent().toggleClass("checked")
+		savedata()
+	});
 	$(".check__edit").click((e) => {
 		let element = $(e.currentTarget);
 		let siblings = $(element.parent()).siblings()
 		index = -1
 		step = 0
-		for (el of siblings){
-			if ($(el).prop("tagName") === "LABEL"){
+		for (el of siblings) {
+			if ($(el).prop("tagName") === "LABEL") {
 				index = step
 				break
 			}
@@ -157,9 +174,9 @@ if (!filename) {
 			continue
 		}
 		format = ""
-		try{
+		try {
 			json_data = JSON.parse(storage.getItem(storage.key(index)))
-		}catch{
+		} catch{
 			json_data = {}
 		}
 		for (x in json_data) {
@@ -194,11 +211,11 @@ if (!filename) {
 	$("#todolist > header h1").text(filename)
 	start()
 }
-function defexport(){
+function defexport() {
 	$("#exportdata").click(() => {
 		data = {}
 		for (let x = 0; x < storage.length; x++) {
-			if (storage.key(x) !== "null"){
+			if (storage.key(x) !== "null") {
 				data[storage.key(x)] = [true, "3000-01-01T12:00"]
 			}
 		}
@@ -206,9 +223,9 @@ function defexport(){
 		frame.setAttribute("src", loc + "?name=Which%20todos%20would%20you%20like%20to%20include&temp=true")
 		frame.classList.add("bigiframe")
 		document.body.appendChild(frame)
-		window.frames[0].onload = function(){
+		window.frames[0].onload = function () {
 			window.frames[0].postMessage({
-				"html":`
+				"html": `
 <style>
 #input, #nav, .check_tools{
 	display: none !important;
@@ -216,7 +233,7 @@ function defexport(){
 </style>
 <button id="letsgo" style="width:60%;margin-left:20%;margin-top:40px;font-size:18px;" onclick='window.parent.postMessage({"exportdata":data}, "*")';>Done!</button>
 				`,
-				"js":`
+				"js": `
 storage.data = ${JSON.stringify(data)}
 data = storage.data
 refresh()
@@ -234,7 +251,7 @@ refresh()
 	})
 }
 
-function defimport(){
+function defimport() {
 	$("#importdata").click(() => {
 		data = {}
 		for (let x = 0; x < storage.length; x++) {
@@ -259,11 +276,11 @@ function defimport(){
 	})
 }
 
-function defcopy(){
+function defcopy() {
 	$("#copytododata").click(() => {
 		data = {}
 		for (let x = 0; x < storage.length; x++) {
-			if (storage.key(x) != "null"){
+			if (storage.key(x) != "null") {
 				data[storage.key(x)] = storage.getItem(storage.key(x))
 			}
 		}
@@ -397,20 +414,6 @@ function refresh() {
 		<span class="duedata"> ${timestring2}</span>
 		</div>`);
 	}
-	$("#todolist span.close").click((e) => {
-		let element = $(e.currentTarget);
-		delete data[$(element.parent().parent()).data("key")];
-		element.parent().parent().remove();
-		savedata()
-	});
-	$("input[type='checkbox']").click((e) => {
-		let element = $(e.currentTarget);
-		let sib = $(element.parent()).data("key");
-		data[sib][0] = !data[sib][0];
-		element.parent().toggleClass("unchecked")
-		element.parent().toggleClass("checked")
-		savedata()
-	});
 	checkmarks()
 }
 $("#letsgo").click(() => {
@@ -516,60 +519,60 @@ window.onkeyup = function (e) {
 }
 // Too lazy to figure it out myself so I just copy pasted off of stackoverflow
 function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  elmnt.onmousedown = dragMouseDown;
+	var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+	elmnt.onmousedown = dragMouseDown;
 
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
+	function dragMouseDown(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// get the mouse cursor position at startup:
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		document.onmouseup = closeDragElement;
+		// call a function whenever the cursor moves:
+		document.onmousemove = elementDrag;
+	}
 
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
+	function elementDrag(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// calculate the new cursor position:
+		pos1 = pos3 - e.clientX;
+		pos2 = pos4 - e.clientY;
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		// set the element's new position:
+		elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+		elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+	}
 
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
+	function closeDragElement() {
+		// stop moving when mouse button is released:
+		document.onmouseup = null;
+		document.onmousemove = null;
+	}
 }
 alertCount = 0
-function create_alert(text, whattodo=null){
+function create_alert(text, whattodo = null) {
 	alertCount += 1
-	if (!whattodo){
-		whattodo = "jQuery('#todoalert"+alertCount+"').remove()"
+	if (!whattodo) {
+		whattodo = "jQuery('#todoalert" + alertCount + "').remove()"
 	}
-  	document.body.innerHTML += `<div class="mserror" id="todoalert${alertCount}" style="color:black;">Todolist alert<button onclick=\"${whattodo}\">&times;</button><div class="errcontent"><button class="erricon">&times;</button><span class="mserrortotheright">${text}<br><button class="errokay" onclick=\"${whattodo}\">Okay</button></span></div></div>`
-  	document.querySelectorAll(".mserror").forEach((el)=>{dragElement(el)})
+	document.body.innerHTML += `<div class="mserror" id="todoalert${alertCount}" style="color:black;">Todolist alert<button onclick=\"${whattodo}\">&times;</button><div class="errcontent"><button class="erricon">&times;</button><span class="mserrortotheright">${text}<br><button class="errokay" onclick=\"${whattodo}\">Okay</button></span></div></div>`
+	document.querySelectorAll(".mserror").forEach((el) => { dragElement(el) })
 	defcopy()
 	defexport()
 	defimport()
 }
 defimport()
 
-async function movecheck(item){
+async function movecheck(item) {
 	item = $(item)
 	item.css("background-color", "var(--highlight-color)")
 	pointer = 1
-	for (check of $(".check")){
-		if (!$(check).is(item)){
-			$(check).after("<span class='movedividers' style='color:orange;margin:10px;margin-left:20px;display: flex;align-items:center;column-gap:20px'>"+pointer+"<hr style='flex:1;height:fit-content;height:-moz-fit-content;border-color:orange;'></span>")
+	for (check of $(".check")) {
+		if (!$(check).is(item)) {
+			$(check).after("<span class='movedividers' style='color:orange;margin:10px;margin-left:20px;display: flex;align-items:center;column-gap:20px'>" + pointer + "<hr style='flex:1;height:fit-content;height:-moz-fit-content;border-color:orange;'></span>")
 			pointer += 1
 		}
 	}
@@ -577,14 +580,14 @@ async function movecheck(item){
 		create_alert(`Which line would you like to move this to?
 			<br>
 			<form onsubmit='event.preventDefault()'>
-				<input id='input_move_num' width='200px' type='number' onmousedown='void()' min='1' max='${$(".check").length-1}' required style='width:200px;'>
+				<input id='input_move_num' width='200px' type='number' onmousedown='void()' min='1' max='${$(".check").length - 1}' required style='width:200px;'>
 			</form>
 		`, "console.log()")
 		$("#input_move_num").select()
-		$(".errokay").click(e=>{
-			if (1<= Number($("#input_move_num").val()) && Number($("#input_move_num").val()) <= $(".check").length-1){
+		$(".errokay").click(e => {
+			if (1 <= Number($("#input_move_num").val()) && Number($("#input_move_num").val()) <= $(".check").length - 1) {
 				res = Number($("#input_move_num").val())
-				jQuery('#todoalert'+alertCount).remove()
+				jQuery('#todoalert' + alertCount).remove()
 				resolve(res)
 			}
 		})
@@ -593,9 +596,9 @@ async function movecheck(item){
 	d = data[name]
 	delete data[name]
 	newdata = {}
-	for (let key = 1;key<=Object.keys(data).length;key++){
-		newdata[Object.keys(data)[key-1]] = data[Object.keys(data)[key-1]]
-		if (key === result){
+	for (let key = 1; key <= Object.keys(data).length; key++) {
+		newdata[Object.keys(data)[key - 1]] = data[Object.keys(data)[key - 1]]
+		if (key === result) {
 			newdata[name] = d
 		}
 	}
@@ -603,6 +606,5 @@ async function movecheck(item){
 	savedata()
 	refresh()
 }
-$(".check__move").click(e=>{
-	movecheck($(e.currentTarget).parent().parent())
-})
+
+$("#add").select()

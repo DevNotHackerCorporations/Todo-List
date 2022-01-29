@@ -286,7 +286,7 @@ a:hover{
 
 
 @media print{
-	#nav, #input, footer, header::after{
+	#nav, #input, footer, header::after, #color_scheme_toggle{
 		display: none;
 	}
 	body{
