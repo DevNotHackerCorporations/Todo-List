@@ -1,3 +1,8 @@
+// register PWA
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
+}
+
 window.onmessage = function (event) {
 	if (event.data.html) {
 		$("body").append(event.data.html)
@@ -25,7 +30,7 @@ window.onmessage = function (event) {
 	}
 }
 
-var notification
+var notification;
 const url_data = new URLSearchParams(window.location.search)
 const filename = url_data.get("name")
 let storage = localStorage
@@ -390,7 +395,11 @@ const create_time = function () {
 	//posttime = new Date(data[x][1]);
 	getdate = (posttime.getDate() + 1) % daysInMonth(posttime.getMonth() + 1, posttime.getFullYear())
 	timestring = posttime.getFullYear() + "-" + (posttime.getMonth() + 1 < 10 ? "0" : "") + (posttime.getMonth() + 1) + "-" + (getdate < 10 ? "0" : "") + getdate + "T" + (posttime.getHours() < 10 ? "0" : "") + posttime.getHours() + ":" + (posttime.getMinutes() < 10 ? "0" : "") + posttime.getMinutes()
-	$("#addDatetime").val(timestring)
+	try{
+		$("#addDatetime").val(timestring)
+	}catch(err){
+		$("#addDatetime").val(new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0])
+	}
 }
 create_time()
 setInterval(create_time, 60000) //weird
@@ -608,3 +617,15 @@ async function movecheck(item) {
 }
 
 $("#add").select()
+
+const getStorageSize = () =>{
+	let _lsTotal = 0
+	for (_x in localStorage) {
+		if (!localStorage.hasOwnProperty(_x)) {
+			continue;
+		}
+		let _xLen = ((localStorage[_x].length + _x.length) * 2);
+		_lsTotal += _xLen;
+	};
+	return (_lsTotal / 1024).toFixed(2) + " KB";
+}
