@@ -1,6 +1,7 @@
+const loc = "https://" + location.hostname + location.pathname
 // register PWA
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
+    navigator.serviceWorker.register(loc+"sw.js");
 }
 
 window.onmessage = function (event) {
@@ -34,7 +35,6 @@ var notification;
 const url_data = new URLSearchParams(window.location.search)
 const filename = url_data.get("name")
 let storage = localStorage
-const loc = "https://" + location.hostname + location.pathname
 function getCookie(cname) {
 	let name = cname + "=";
 	let decodedCookie = decodeURIComponent(document.cookie);
