@@ -14,6 +14,7 @@
 	</script>
 	<link rel="icon" type="image/jpg" href="/assets/2048.png">
 	<link rel="manifest" href="manifest.webmanifest" />
+	<script src="quotes.js"></script>
 </head>
 
 <body class="dark">
@@ -43,11 +44,14 @@
 				<button class="button" title="print this page" onclick="print()">🖨️</button>
 				<button class="button" title="refresh the todo" onclick="refresh()">🔄</button>
 				<button class="button" title="delete all completed items" onclick="deletecomplete()">🗑️ ✅</button>
+				<button class="button" title="Copy this todolist" onclick="c_todolist()">📋</button>
+				<button class="button" title="Disable/Enable the quote" onclick="document.getElementById('quote').toggleAttribute('open')">💬</button>
 				<span id="savingmsg" class="button" title="Your todolist has been saved">Saved &#9989;</span>
 			</section>
 			<header>
 				<h1>Todo List</h1>
 			</header>
+			<dialog id="quote" open><h1>A Quote!</h1><button onclick="generate_quote()">Another please!</button><button onclick="navigator.clipboard.writeText($('#quote_cont').html());create_alert('Copied the quote!')">Copy Quote</button><p id="quote_cont">Loading Quote</p></dialog>
 			<section style="margin-top: 150px" id="container"></section>
 			<section id="input">
 				<input type="text" id="add" autocomplete="off"/><button id="letsgo">Go!</button>

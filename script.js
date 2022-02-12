@@ -1,8 +1,16 @@
 const loc = "https://" + location.hostname + location.pathname
 // register PWA
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register(loc+"sw.js");
+	navigator.serviceWorker.register(loc + "sw.js");
 }
+
+function generate_quote(){
+	let quote = choose(quotes)
+	$("#quote_cont").html(`"${quote.text}" - ${quote.author}`)
+}
+
+setInterval(generate_quote, 60000)
+generate_quote()
 
 window.onmessage = function (event) {
 	if (event.data.html) {
@@ -262,7 +270,12 @@ function defimport() {
 		for (let x = 0; x < storage.length; x++) {
 			data[storage.key(x)] = storage.getItem(storage.key(x))
 		}
-		$.post("https://todolist-api.andrewchen51.repl.co/get", { name: prompt("What's the code?").toUpperCase() }, function (result) {
+		let todo_code = prompt("What's the code?")
+		if (!todo_code){
+			create_alert("Something went wrong. Either you pressed the cancel button or the JavaScript code got confused. Maybe both. ¯\\_(ツ)_/¯")
+			return false
+		}
+		$.post("https://todolist-api.andrewchen51.repl.co/get", { name: todo_code.toUpperCase() }, function (result) {
 			if (result["error"]) {
 				create_alert("<span style='color:red;'>ERROR: " + result["error"] + "</span>")
 			} else {
@@ -388,6 +401,24 @@ setInterval(function () {
 		}
 	}
 }, 9000)
+const c_todolist = () => {
+	let result = filename + "\n"
+	result += "=".repeat(filename.length)
+	result += "\n\n"
+	for (key in data) {
+		let checked = data[key][0]
+		let complete = data[key][1]
+		result += "[" + (checked ? "x" : " ") + "] "
+		result += key
+		result += "\n"
+		result += "    Complete by "
+		result += complete
+		result += "\n\n"
+	}
+	navigator.clipboard.writeText(result)
+	create_alert("Copied to clipboard!")
+	
+}
 let timestring;
 let getdate;
 const create_time = function () {
@@ -395,14 +426,14 @@ const create_time = function () {
 	//posttime = new Date(data[x][1]);
 	getdate = (posttime.getDate() + 1) % daysInMonth(posttime.getMonth() + 1, posttime.getFullYear())
 	timestring = posttime.getFullYear() + "-" + (posttime.getMonth() + 1 < 10 ? "0" : "") + (posttime.getMonth() + 1) + "-" + (getdate < 10 ? "0" : "") + getdate + "T" + (posttime.getHours() < 10 ? "0" : "") + posttime.getHours() + ":" + (posttime.getMinutes() < 10 ? "0" : "") + posttime.getMinutes()
-	try{
+	try {
 		$("#addDatetime").val(timestring)
-	}catch(err){
-		$("#addDatetime").val(new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0])
+	} catch (err) {
+		$("#addDatetime").val(new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0])
 	}
 }
 create_time()
-setInterval(create_time, 60000) //weird
+setInterval(create_time, 60000)
 function refresh() {
 	$("#container").html("");
 	counter = -1;
@@ -567,7 +598,7 @@ function create_alert(text, whattodo = null) {
 	if (!whattodo) {
 		whattodo = "jQuery('#todoalert" + alertCount + "').remove()"
 	}
-	document.body.innerHTML += `<div class="mserror" id="todoalert${alertCount}" style="color:black;">Todolist alert<button onclick=\"${whattodo}\">&times;</button><div class="errcontent"><button class="erricon">&times;</button><span class="mserrortotheright">${text}<br><button class="errokay" onclick=\"${whattodo}\">Okay</button></span></div></div>`
+	document.body.innerHTML += `<div class="mserror" id="todoalert${alertCount}" style="color:black;">Todolist alert<button onclick=\"${whattodo}\">&times;</button><div class="errcontent"><button class="erricon">✓</button><span class="mserrortotheright">${text}<br><button class="errokay" onclick=\"${whattodo}\">Okay</button></span></div></div>`
 	document.querySelectorAll(".mserror").forEach((el) => { dragElement(el) })
 	defcopy()
 	defexport()
@@ -618,7 +649,12 @@ async function movecheck(item) {
 
 $("#add").select()
 
-const getStorageSize = () =>{
+function choose(choices) {
+	var index = Math.floor(Math.random() * choices.length);
+	return choices[index];
+}
+
+const getStorageSize = () => {
 	let _lsTotal = 0
 	for (_x in localStorage) {
 		if (!localStorage.hasOwnProperty(_x)) {
@@ -629,3 +665,4 @@ const getStorageSize = () =>{
 	};
 	return (_lsTotal / 1024).toFixed(2) + " KB";
 }
+

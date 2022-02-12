@@ -435,7 +435,7 @@ body.light :is(.choose_todo_todo:hover, #choosetodo_input input:focus, #chooseto
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
-  position:absolute;
+  position:fixed;
   background-color:#d7e7f8;
   height:220px;
   width:400px;
@@ -474,7 +474,8 @@ div.mserror>button:hover{
   width:310px;
 }
 .erricon{
-  background:linear-gradient(180deg, #e7ada5 0%, #c5523f 50%, #c88174 100%);
+  /*background:linear-gradient(180deg, #e7ada5 0%, #c5523f 50%, #c88174 100%);*/
+  background: linear-gradient(180deg, #7fb383 0%, #36a440 50%, #7fb383 100%);
   font-size:48px;
   width:56px;
   height:56px;
@@ -507,4 +508,23 @@ div.mserror>button:hover{
 }
 #color_scheme_toggle:hover{
 	font-size:72px;
+}
+#quote{
+    right: 0;
+    left: initial;
+    top: 50px;
+    margin: 0;
+	padding: 20px;
+	max-width: max(25%, 400px);
+}
+#quote > h1{
+	margin: 0;
+}
+#choosetodo__todos:empty{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+#choosetodo__todos:empty::before{
+	content: "No todolists... yet!";
 }

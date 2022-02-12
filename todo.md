@@ -3,7 +3,7 @@
 - [ ] Fix Notifs system
 - [ ] Make In Progress
 - [x] "Saved"
-- [ ] Ability to edit
+- [x] Ability to edit
 - [x] X out all finished todos
 - [ ] "A todo with the same name exists"
 - [ ] 
