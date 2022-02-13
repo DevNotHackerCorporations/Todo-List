@@ -226,6 +226,10 @@ if (!filename) {
 }
 function defexport() {
 	$("#exportdata").click(() => {
+		if (!window.navigator.onLine){
+			create_alert("This feature requires WiFi, which you currently do not have.")
+			return
+		}
 		data = {}
 		for (let x = 0; x < storage.length; x++) {
 			if (storage.key(x) !== "null") {
@@ -266,6 +270,10 @@ refresh()
 
 function defimport() {
 	$("#importdata").click(() => {
+		if (!window.navigator.onLine){
+			create_alert("This feature requires WiFi, which you currently do not have.")
+			return
+		}
 		data = {}
 		for (let x = 0; x < storage.length; x++) {
 			data[storage.key(x)] = storage.getItem(storage.key(x))
@@ -462,6 +470,7 @@ $("#letsgo").click(() => {
 		return;
 	}
 	if (Object.keys(data).includes(textdata)) {
+		create_alert("A todo with the same name exists in this todolist")
 		return;
 	}
 	if ($("#addDatetime").val() === "") {
