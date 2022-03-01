@@ -212,7 +212,7 @@ a:hover{
 	outline: none;
 	overflow: auto;
 	background:var(--light-bg);
-	color: lightgray;
+	color: var(--main-color);
 	font-weight: bold;
 	border: 0;
 }
@@ -257,7 +257,7 @@ a:hover{
     text-align: left;
     padding: 20px 20px;
 	font-size: 24px;
-	color: white;
+	color: var(--main-color);
 	border: 0;
 	outline: 0;
     width: calc(50vw - 100px);

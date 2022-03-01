@@ -1,9 +1,9 @@
-- [ ] Make the things we want draggable
+- [x] Make the things we want draggable
 - [ ] If overdue, make the text there red.
 - [ ] Fix Notifs system
-- [ ] Make In Progress
+- [?] Make In Progress
 - [x] "Saved"
 - [x] Ability to edit
 - [x] X out all finished todos
-- [ ] "A todo with the same name exists"
+- [x] "A todo with the same name exists"
 - [ ] 
