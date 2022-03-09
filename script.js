@@ -207,7 +207,7 @@ if (!filename) {
 	$(".choose_todo_todo span.close").click(e => {
 		let dataname = $($(e.currentTarget).parent()).data("name")
 		e.stopPropagation()
-		if (confirm("Do you really want to delete todo list \"" + dataname + "\"? This action is unreversable")) {
+		if (confirm("Do you really want to delete todo list \"" + dataname + "\"? This action is irreversable")) {
 			storage.removeItem(dataname)
 			location.reload()
 		}
